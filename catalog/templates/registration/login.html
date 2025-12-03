@@ -1,0 +1,10 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  <p>{{ form.username.label_tag }} {{ form.username }}</p>
+  <p>{{ form.password.label_tag }} {{ form.password }}</p>
+  <input type="submit" value="login">
+</form>
+<a href="{% url 'password_reset' %}">Lost password?</a>
+{% endblock %}

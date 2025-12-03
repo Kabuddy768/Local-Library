@@ -1,0 +1,49 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <h1 class="mb-3">Author: {{ author.first_name }} {{ author.last_name }}</h1>
+
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <p><strong>Date of birth:</strong> {{ author.date_of_birth }}</p>
+      {% if author.date_of_death %}
+        <p><strong>Date of death:</strong> {{ author.date_of_death }}</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <h2>Books by this author</h2>
+  {% if author.book_set.all %}
+    <ul class="list-group mb-4">
+      {% for book in author.book_set.all %}
+        <li class="list-group-item">
+          <a href="{{ book.get_absolute_url }}" class="fw-bold">{{ book.title }}</a>
+          <p class="mb-0 text-muted">{{ book.summary }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert alert-info">This author has no books in the catalog.</div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+{{ block.super }}
+{% if perms.catalog.change_author or perms.catalog.delete_author %}
+<hr>
+<ul class="nav flex-column">
+  {% if perms.catalog.change_author %}
+    <li class="nav-item mb-2">
+      <a class="nav-link btn btn-outline-primary w-100" href="{% url 'author-update' author.id %}">Update Author</a>
+    </li>
+  {% endif %}
+  {% if not author.book_set.all and perms.catalog.delete_author %}
+    <li class="nav-item mb-2">
+      <a class="nav-link btn btn-outline-danger w-100" href="{% url 'author-delete' author.id %}">Delete Author</a>
+    </li>
+  {% endif %}
+</ul>
+{% endif %}
+{% endblock %}

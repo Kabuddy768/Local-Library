@@ -1,0 +1,75 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container">
+  <!-- Book header -->
+  <div class="py-4">
+    <h1 class="display-4">{{ book.title }}</h1>
+    <p class="lead">
+      <strong>Author:</strong>
+      <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a>
+    </p>
+  </div>
+
+  <!-- Book details -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <p><strong>Summary:</strong> {{ book.summary }}</p>
+      <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+      <p><strong>Language:</strong> {{ book.language }}</p>
+      <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
+    </div>
+  </div>
+
+  <!-- Book copies -->
+  <div class="mb-4">
+    <h4>Copies</h4>
+    <div class="row">
+      {% for copy in book.bookinstance_set.all %}
+        <div class="col-md-6 mb-3">
+          <div class="card h-100 {% if copy.status == 'a' %}border-success{% elif copy.status == 'm' %}border-danger{% else %}border-warning{% endif %}">
+            <div class="card-body">
+              <h5 class="card-title">
+                Status: 
+                <span class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+                  {{ copy.get_status_display }}
+                </span>
+              </h5>
+              
+              {% if copy.status != 'a' %}
+                <p><strong>Due to be returned:</strong> {{ copy.due_back }}</p>
+              {% endif %}
+              
+              <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
+              <p class="text-muted"><strong>ID:</strong> {{ copy.id }}</p>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p>No copies available for this book.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+{{ block.super }}
+
+{% if perms.catalog.change_book or perms.catalog.delete_book %}
+<hr>
+<ul class="nav flex-column">
+  {% if perms.catalog.change_book %}
+    <li class="nav-item mb-2">
+      <a class="nav-link btn btn-outline-primary w-100" href="{% url 'book-update' book.id %}">Edit Book</a>
+    </li>
+  {% endif %}
+
+  {% if perms.catalog.delete_book %}
+    <li class="nav-item mb-2">
+      <a class="nav-link btn btn-outline-danger w-100" href="{% url 'book-delete' book.id %}">Delete Book</a>
+    </li>
+  {% endif %}
+</ul>
+{% endif %}
+{% endblock %}

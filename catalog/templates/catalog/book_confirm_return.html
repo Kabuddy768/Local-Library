@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Return Book</h1>
+  <p>Are you sure you want to mark the following book as returned?</p>
+
+  <ul>
+    <li>{{ book_instance.book.title }}</li>
+    <li>Borrower: {{ book_instance.borrower.get_username }}</li>
+    <li>Due back: {{ book_instance.due_back }}</li>
+  </ul>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Confirm Return</button>
+    <a href="{% url 'all-borrowed' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}

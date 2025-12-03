@@ -1,0 +1,43 @@
+{% extends "base_generic.html" %}
+
+{% block title %}
+  <title>Local Library | Home</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Welcome message -->
+  <div class="py-4">
+    <h1 class="display-4">Welcome to Local Library</h1>
+    <p class="lead">
+      A website developed by <em>Mozilla Developer Network</em>.
+    </p>
+    <p class="text-muted">
+      You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.
+    </p>
+  </div>
+
+  <!-- Library statistics -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+      <h2 class="h5 mb-0">Library Statistics</h2>
+    </div>
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Books:</strong> {{ num_books }}</li>
+        <li class="list-group-item"><strong>Copies:</strong> {{ num_instances }}</li>
+        <li class="list-group-item"><strong>Copies available:</strong> {{ num_instances_available }}</li>
+        <li class="list-group-item"><strong>Authors:</strong> {{ num_authors }}</li>
+        <li class="list-group-item"><strong>Genres:</strong> {{ num_genres }}</li>
+        <li class="list-group-item"><strong>Books containing '{{ word }}':</strong> {{ num_books_with_word }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Optional call-to-action
+  <div class="my-4">
+    <a href="{% url 'books' %}" class="btn btn-success btn-lg">Browse All Books</a>
+    <a href="{% url 'authors' %}" class="btn btn-secondary btn-lg">View All Authors</a>
+  </div> -->
+</div>
+{% endblock %}
